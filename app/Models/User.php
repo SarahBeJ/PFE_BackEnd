@@ -17,17 +17,19 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    protected $connection = 'mongodb';
+    protected $collection = 'users';
     protected $fillable = [
-        'nom',
-        'prenom',
+        'first_name',
+        'last_name',
         'email',
         'password',
         'cin',
-        'passport',
-        'telephone',
-        "niveau",
-        "domaine",
-     
+        'domaine',
+        'coordinator',
+        'service_rh',
+        'encadrant',
+        'status'
     ];
 
     /**

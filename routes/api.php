@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\stageController;
+use App\Http\Controllers\StageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,26 +17,31 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-
+//stagiaire
+Route::post("/stages/register",[StageController::class,"register"]);
+Route::post("/stages/login",[StageController::class,"login"]);
 
 //post request
 Route::post("/users/register",[AuthController::class,"register"]);
 Route::post("/users/login",[AuthController::class,"login"]);
 Route::post('/stage',[stageController::class,'store']);
 
-//get request
-Route::get("/stage",[stageController::class,'index']);
-Route::get('/stage/search/{nom}',[stage::class,'search']);
-Route::get('/stage/{id}',[stage::class,'show']);
+
 
 
 
 //protected routes
-Route::group(['middleware' => ['auth:sanctum']], function () {
-Route::get("/users",[AuthController::class,"index"]);
-Route::post('/stage',[stageController::class,'store']);
-Route::put('/stage/{id}',[stageController::class,'update']);
-Route::put('/stage/{id}',[stageController::class,'destroy']);
+Route::group(['middleware' => ['auth:sanctum','banned']], function () {
+    //all users
+Route::put("/users/{id}",[AuthController::class,"update"]);
+  //service rh
+Route::get("/users",[AuthController::class,"index"])->middleware('service');
+Route::get("/users/{id}",[AuthController::class,"show"])->middleware('service');
+// coordinator & admin
+Route::post("/users",[AuthController::class,"store"])->middleware('coordinator');
+
+Route::delete("/users/{id}",[AuthController::class,"destroy"]);
+
 });
 
 
