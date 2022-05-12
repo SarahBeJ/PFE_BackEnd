@@ -10,31 +10,37 @@ class AuthController extends Controller
 {
 
     public function index (){
-        return User::all();
+
+        $users = User::paginate(10);
+        return $users;
     }
 
     public function register (Request $request){
         $fields = $request->validate([
             'first_name' => 'required|string',
             'last_name' => 'required|string',
-            'email' => 'required|string|unique:users,email',
+            'toplogin' =>'required|string|unique:users,toplogin',
+            'email' => 'required|string|unique:users,email', 
             'password' => 'required|string',
             'cin' => 'required|numeric|digits:8|unique:users,cin',
             'domaine' => 'string',
+            
 
 
         ]);
         $user = User::create([
             'first_name' => $fields['first_name'],
             'last_name' => $fields['last_name'],
+            'toplogin' => $fields['toplogin'],
             'email' => $fields['email'],
             'password' => bcrypt($fields['password']),
             'cin' => $fields['cin'],
             'domaine' => $fields['domaine'],
-            'coordinator'=> 0,
-            'service_rh'=> 0,
-            "encadrant"=> 1,
-            "status" => 1,
+            
+            'coordinator'=> false,
+            'service_rh'=> false,
+            "encadrant"=> true,
+            "status" => true,
 
         ]);
 
@@ -51,17 +57,17 @@ class AuthController extends Controller
     public function login (Request $request){
         
         $fields = $request->validate([
-            'email' => 'required|string',
+            'toplogin' => 'required|string',
             'password' => 'required|string'
         ]);
         //find email
-        $user = User::where('email',$fields['email'])->first();
+        $user = User::where('toplogin',$fields['toplogin'])->first();
 
         //check password
 
         if(!$user || !Hash::check($fields['password'],$user->password)){
             return response([
-                'message' => 'email or password wrong!'
+                'message' => 'email ou mot de passe faux !'
             ], 401);
         }
 
@@ -88,6 +94,7 @@ class AuthController extends Controller
         $request->validate([
             'first_name' => 'required|string',
             'last_name' => 'required|string',
+            'toplogin' => 'required|string',
             'email' => 'required|string|unique:users,email',
             'password' => 'required|string',
             'cin' => 'required|numeric|digits:8|unique:users,cin',
@@ -132,6 +139,6 @@ class AuthController extends Controller
     public function destroy($id)
     {
         User::destroy($id);
-        return "user has been deleted";
+        return "utilisateur supprimé";
     }
 }

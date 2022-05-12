@@ -17,7 +17,7 @@ class Encadrant
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user()->encadrant === 1) {
+        if (Auth::user()->encadrant === true) {
             return $next($request);
         } else {
             return  response("You dont have access");

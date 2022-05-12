@@ -17,7 +17,7 @@ class CheckBanned
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() &&  Auth::user()->status === 0) {
+        if (Auth::check() &&  Auth::user()->status === false) {
 
             return  response("Your Account is deactivated!");
         } else {

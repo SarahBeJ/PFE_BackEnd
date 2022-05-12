@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Jenssegers\Mongodb\Eloquent\Model as EloquentModel;
+use Illuminate\Auth\Passwords\CanResetPassword;
 
 class Stage extends EloquentModel
 {
@@ -21,10 +22,11 @@ class Stage extends EloquentModel
         'password',
         'cin',
         'passport',
-        'telephone',
+        'phone',
         'niveau',
         'domaine',
-        'status'
+        'status',
+        'image'
 
     ];
       /**
@@ -43,6 +45,6 @@ class Stage extends EloquentModel
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'cin_verified_at' => 'datetime',
     ];
 }

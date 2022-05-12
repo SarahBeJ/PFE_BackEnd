@@ -35,11 +35,6 @@ return [
 
     'connections' => [
 
-        'mongodb' => [
-            'driver' => 'mongodb',
-            'dsn' => env('DB_URI', 'mongodb+srv://sarapfe:hh41iSWJv0cs2xKs@cluster0.jb6jn.mongodb.net/sara-pfe?authSource=admin&replicaSet=atlas-y39w6c-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass&retryWrites=true&ssl=true'),
-            'database' => 'sara-pfe',
-        ],
 
         'sqlite' => [
             'driver' => 'sqlite',
@@ -97,16 +92,16 @@ return [
             'prefix_indexes' => true,
         ],
         
-        // 'mongodb' => [
-        //     'driver'   => 'mongodb',
-        //     'host'     => env('MONGO_DB_HOST', '127.0.0.1'),
-        //     'port'     => env('MONGO_DB_PORT', 27017),
-        //     'database' => env('MONGO_DB_DATABASE', 'laramongoo'),
-        //     'username' => env('MONGO_DB_USERNAME', ''),
-        //     'password' => env('MONGO_DB_PASSWORD'),
-        //     'options'  => ['database' => env('DB_AUTHENTICATION_DATABASE', 'admin'), // required with Mongo 3+
-        //     ]
-        // ],
+        'mongodb' => [
+            'driver'   => 'mongodb',
+            'host'     => env('MONGO_DB_HOST', '127.0.0.1'),
+            'port'     => env('MONGO_DB_PORT', 27017),
+            'database' => env('MONGO_DB_DATABASE', 'laramongoo'),
+            'username' => env('MONGO_DB_USERNAME', ''),
+            'password' => env('MONGO_DB_PASSWORD'),
+            'options'  => ['database' => env('DB_AUTHENTICATION_DATABASE', 'admin'), // required with Mongo 3+
+            ]
+        ],
 
     ],
 

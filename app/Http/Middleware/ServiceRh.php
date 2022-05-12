@@ -17,7 +17,7 @@ class ServiceRh
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user()->service_rh === 1) {
+        if (Auth::user()->service_rh === true) {
             return $next($request);
         } else {
             return  response("You dont have access");
