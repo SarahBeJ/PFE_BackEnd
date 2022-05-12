@@ -17,7 +17,7 @@ class Coordinator
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user() && Auth::user()->coordinator === 1) {
+        if (Auth::user() && Auth::user()->coordinator === true) {
             return $next($request);
         } else {
             return  response("You dont have access");

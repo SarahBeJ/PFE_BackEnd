@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Stage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Storage;
 
 class stageController extends Controller
 {
@@ -15,56 +15,22 @@ class stageController extends Controller
      */
     public function index()
     {
-       return Stage:: all();
+        $stages = Stage::paginate(10);
+        return $stages;
     }
 
-    public function register (Request $request){
-        $fields = $request->validate([
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'email' => 'required|string|unique:stages,email',
-            'password' => 'required|string',
-            'cin' => 'required|numeric|digits:8|unique:stages,cin',
-            'passport' => 'numeric',
-            'phone' => 'required|numeric|digits:8',
-            'niveau' => 'required|string',
-            'domaine' => 'required|string',
-
-
-        ]);
-        $stage = Stage::create([
-            'first_name' => $fields['first_name'],
-            'last_name' => $fields['last_name'],
-            'email' => $fields['email'],
-            'password' => bcrypt($fields['password']),
-            'cin' => $fields['cin'],
-            'passport' => $fields['passport'],
-            'phone' => $fields['phone'],
-            'niveau' => $fields['niveau'],
-            'domaine' => $fields['domaine'],
-            'status'=> 1
-            
-
-        ]);
-
-        $token = $stage->createToken('accessPfe')->plainTextToken;
-        $response = [
-            'user'=>$stage,
-            'token'=>$token,
-       
-        ];
-
-        return response($response,201);
-    }
+    
 
     public function login (Request $request){
         
         $fields = $request->validate([
-            'email' => 'required|string',
-            'password' => 'required|string'
+            'cin' => 'required|numeric|digits:8|',
+            'password' => 'required|string',
+           
+            
         ]);
         //find email
-        $stage = Stage::where('email',$fields['email'])->first();
+        $stage = Stage::where('cin',$fields['cin'])->first();
 
         //check password
 
@@ -95,19 +61,32 @@ class stageController extends Controller
         $request->validate([
             'first_name' => 'required|string',
             'last_name' => 'required|string',
-            'email' => 'required|string|unique:users,email',
+            'email' => 'required|email|unique:stages,email',
             'password' => 'required|string',
-            'cin' => 'required|numeric|digits:8|unique:users,cin',
-            'passport' => 'numeric',
-            'phone' => 'required|numeric|digits:8',
+            'cin' => 'required|numeric|digits:8|unique:stages,cin',
+            'passport' => 'required|numeric|digits:8|unique:stages,passport',
+            'phone' => 'required|numeric|digits:8|unique:',
             'niveau' => 'required|string',
             'domaine' => 'required|string',
+            'image' => 'required|mimes:pdf , xlx,csv|max:2048',
         
 
         ]);
-        return Stage::create($request->all());
-    }
+        
+        if ($request->hasFile('image')) {
+            $imageFullName = $request->file('image')->getClientOriginalName();
+            $request->file('image')->storeAs('images', $imageFullName);
 
+            $subject = Stage::create([
+                
+                "image" => Storage::url("images/" . $imageFullName)
+            ]);
+
+            return response($subject, 201);
+        };
+
+        return response("Please Select an Image", 400);
+    }
     /**
      * Display the specified resource.
      *

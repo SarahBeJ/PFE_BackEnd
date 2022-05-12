@@ -67,6 +67,6 @@ class Kernel extends HttpKernel
         'coordinator' => \App\Http\Middleware\Coordinator::class,
         'banned' => \App\Http\Middleware\CheckBanned::class,
         'encadrant' => \App\Http\Middleware\Encadrant::class,
-        'service' => \App\Http\Middleware\Encadrant::class,
+        'service_rh' => \App\Http\Middleware\Encadrant::class,
     ];
 }
