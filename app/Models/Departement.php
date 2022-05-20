@@ -9,7 +9,7 @@ class Departement extends Authenticatable
 {
     use HasFactory;
     protected $connection = 'mongodb';
-    protected $collection = 'questions';
+    protected $collection = 'departements';
     protected $casts = [
         'Departement' => 'array',
 
@@ -20,6 +20,7 @@ class Departement extends Authenticatable
         'chef',
         'etat',
         
+        
 
     ];
-}
+} 

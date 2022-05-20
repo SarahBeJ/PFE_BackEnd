@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+Route::get("/gestion", [DepartementController::class, "index"]);
 Route::get("/subjects", [SubjectController::class, "index"]);
 Route::group(['middleware' => ['auth:sanctum', 'banned']], function () {
     // tous les utilisateurs && stagires
@@ -33,8 +33,8 @@ Route::group(['middleware' => ['auth:sanctum', 'banned']], function () {
     Route::get("/stages/{id}", [StageController::class, "show"]);
 
      // subjects
-     Route::post("/subjects", [SubjectController::class, "store"])->middleware('encadrant');
-     Route::put("/subjects/{id}", [SubjectController::class, "update"])->middleware('encadrant');
+     Route::post("/subjects/creer", [SubjectController::class, "store"])->middleware('encadrant');
+     Route::put("/subjects/modifier/{id}", [SubjectController::class, "update"])->middleware('encadrant');
      Route::delete("/subjects/{id}", [SubjectController::class, "destroy"])->middleware('encadrant');
     
     //réponse
@@ -59,12 +59,13 @@ Route::group(['middleware' => ['auth:sanctum', 'banned']], function () {
     Route::post("/questions", [QuestionController::class, "store"])->middleware('service_rh');
     Route::get("/questions/{id}", [QuestionController::class, "show"])->middleware('service_rh');
     Route::delete("/questions/{id}", [QuestionController::class, "destroy"])->middleware('service_rh');
-    Route::post("/gestion/{id}", [DepartementController::class,"store"])->middleware('service_rh');
+    //département
+    Route::post("/gestion/store", [DepartementController::class,"store"])->middleware('service_rh');
+    Route::get("/gestion/index", [DepartementController::class,"index"])->middleware('service_rh');
     Route::get("/gestion/{id}", [DepartementController::class,"show"])->middleware('service_rh');
-    Route::delete("/gestion/{id}", [DepartementController::class,"destroy"])->middleware('service_rh');
-    Route::put("/gestion/{id}", [DepartementController::class,"update"])->middleware('service_rh');
-    Route::put("/gestion/{id}", [DepartementController::class,"activé"])->middleware('service_rh');
-    Route::put("/gestion/{id}", [DepartementController::class,"désactivé"])->middleware('service_rh');
+    Route::put("/gestion/modifier/{id}", [DepartementController::class,"update"])->middleware('service_rh');
+    Route::put("/gestion/activer/{id}", [DepartementController::class,"activé"])->middleware('service_rh');
+    Route::put("/gestion/desactiver/{id}", [DepartementController::class,"désactivé"])->middleware('service_rh');
 
     // coordinateur
     Route::put("/admin/users/{id}", [AuthController::class, "update"])->middleware('coordinator');
