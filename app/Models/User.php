@@ -31,6 +31,7 @@ class User extends Authenticatable
         'coordinator',
         'service_rh',
         'encadrant',
+        'chef',
         'status'
     ];
 

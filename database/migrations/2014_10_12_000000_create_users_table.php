@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->boolean('coordinator')->default(false);
             $table->boolean('service_rh')->default(false);
+            $table->boolean('chef')->default(false);
             $table->boolean('encadrant')->default(true);
             $table->boolean('status')->default(true);
             $table->timestamp('email_verified_at')->nullable();
