@@ -39,6 +39,7 @@ class AuthController extends Controller
             
             'coordinator'=> false,
             'service_rh'=> false,
+            "chef"=>false,
             "encadrant"=> true,
             "status" => true,
 

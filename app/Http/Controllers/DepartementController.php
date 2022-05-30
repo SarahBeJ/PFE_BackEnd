@@ -28,35 +28,31 @@ class DepartementController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
+        $request->validate([
             'nom' => 'required|string|unique:departement,nom',
-            'chef' => 'required|string|unique:departements,chef', 
-            'etat' =>'string',
-        
-        ]);
-        if ($validator->fails())
-        {
-            return response()->json(
-                ['validation_errors' => $request->messages(),
-                 'status'=>422,
-            ]);
+            'chef' => 'required|string|unique:departement,chef',
+            'etat' => 'required|string',
             
-        }
-        else{
-            Departement::create([
-                'nom' => $request['nom'],
-                'chef' =>$request['chef'],
-                'etat' =>'activé',
-                'utilisateurs' =>[]
+        ]);
 
-            ]);
-            return response()->json([
-                'status'=>200,
-                'message'=>'Departement Crée!'
-
-            ]);
-        }
+        return Departement::create([
+            'nom' => $request['nom'],
+            'chef' => $request['chef'],
+            'etat' => $request['etat'],
+            
+        ]);
+        {
+        return response("information manquante", 400);
     }
+    } 
+    public function departement_user()
+    {
+        $user = Auth::user();
+        $departement = Departement::all()->where('user_id', $user->_id);
+
+        return response($departement, 200);
+    }
+
 
     /**
      * Display the specified resource.
@@ -103,5 +99,10 @@ class DepartementController extends Controller
         $departement->etat = 'activé';
         $departement->save();
         return $departement;
+    }
+    public function destroy($id)
+    {
+        Departement::destroy($id);
+        return "departement supprimé";
     }
 }

@@ -1,27 +1,84 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Stage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
-class stageController extends Controller
+class StageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+
+    public function register(Request $request)
     {
-        $stages = Stage::paginate(10);
-        return $stages;
+        $fields = $request->validate([
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'email' => 'required|string|unique:stages,email',
+            'password' => 'required|string|confirmed',
+            'cin' => 'required|numeric|digits:8|unique:stages,cin',
+            'phone' => 'numeric',
+            'passport' => 'numeric|digits:8|unique:stages,passport',
+            'niveau' => 'required|string',
+            'domaine' => 'required|string',
+            'image' => 'nullable',
+
+
+        ]);
+        if ($request->hasFile('image')) {
+            $imageFullName = $request->file('image')->getClientOriginalName();
+            $request->file('image')->storeAs('images', $imageFullName);
+
+            $user = Stage::create([
+                'first_name' => $fields['first_name'],
+                'last_name' => $fields['last_name'],
+                'email' => $fields['email'],
+                'password' => bcrypt($fields['password']),
+                'cin' => $fields['cin'],
+                'domaine' => $fields['domaine'],
+                'niveau' => $fields['niveau'],
+                'phone' => $fields['phone'],
+                "status" => true,
+                "image" => Storage::url("images/" . $imageFullName)
+            ]);
+
+            $token = $user->createToken('sara-pfe-user')->plainTextToken;
+            $response = [
+                'user' => $user,
+                'token' => $token,
+
+            ];
+
+
+            return response($response, 201);
+        } else {
+
+            $user = Stage::create([
+                'first_name' => $fields['first_name'],
+                'last_name' => $fields['last_name'],
+                'email' => $fields['email'],
+                'password' => bcrypt($fields['password']),
+                'cin' => $fields['cin'],
+                'domaine' => $fields['domaine'],
+                'niveau' => $fields['niveau'],
+                "status" => true,
+                "image" => null
+            ]);
+
+            $token = $user->createToken('sara-pfe-user')->plainTextToken;
+            $response = [
+                'user' => $user,
+                'token' => $token,
+
+            ];
+
+
+            return response($response, 201);
+        }
     }
-
-    
-
-    public function login (Request $request){
+public function login (Request $request){
         
         $fields = $request->validate([
             'cin' => 'required|numeric|digits:8|',
@@ -49,6 +106,18 @@ class stageController extends Controller
 
 
         return response($response, 201);
+    }
+
+    
+   /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $stages = Stage::paginate(10);
+        return $stages;
     }
     /**
      * Store a newly created resource in storage.
@@ -132,4 +201,3 @@ class stageController extends Controller
         return Stage::where('nom','like','%.$nom'.'%')->get();
     }
 }
-

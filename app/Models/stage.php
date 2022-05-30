@@ -10,12 +10,13 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 
 class Stage extends EloquentModel
 {
-    use HasApiTokens, HasFactory, Notifiable;
 
-    protected $connection ='mongodb';
-    protected $collection = 'stages';
+    use HasApiTokens, Notifiable, HasFactory, CanResetPassword;
+
+    protected $connection = 'mongodb';
+    protected $collection  = 'stages';
+
     protected $fillable = [
-        
         'first_name',
         'last_name',
         'email',
@@ -25,11 +26,12 @@ class Stage extends EloquentModel
         'phone',
         'niveau',
         'domaine',
-        'status',
+        "status",
         'image'
 
     ];
-      /**
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
